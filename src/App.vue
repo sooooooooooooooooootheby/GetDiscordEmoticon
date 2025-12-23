@@ -3,7 +3,7 @@
 		<el-container>
 			<el-header>
 				<Icon class="icon" icon="prime:discord" />
-				<span class="title"> Discord 表情贴纸下载器 </span>
+				<span class="title"> Discord Emoticon & Sticker Downloader </span>
 			</el-header>
 			<el-main>
 				<index />

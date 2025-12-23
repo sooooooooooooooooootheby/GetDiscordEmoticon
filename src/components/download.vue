@@ -2,55 +2,66 @@
 	<div class="main">
 		<div class="form">
 			<el-card shadow="never">
-				<span class="title">警告: 小心, 共享您的用户令牌可能是危险的!</span>
-				<p>这个页面不会以任何有害的方式使用你的用户令牌, 只使用它来与Discord进行身份验证, 获取你的服务器列表和他们的表情符号。</p>
+				<span class="title">Warning: Be careful! Don't share your user token</span>
+				<p>This page only will use your user token to get your server list and server emoticons</p>
 			</el-card>
 			<div class="bar">
-				<el-input class="input" v-model="token" placeholder="在这里输入你的token" clearable />
-				<el-button color="#5865F2" plain @click="dialogVisible = true"> token是什么 </el-button>
-				<el-button color="#5865F2" plain @click="submit"> 提交 </el-button>
-				<el-checkbox class="checkbox" v-model="isSave" label="记住你的令牌" size="large" />
+				<el-input class="input" v-model="token" placeholder="Enter your user token here" clearable />
+				<el-button color="#5865F2" plain @click="dialogVisible = true"> what is token? </el-button>
+				<el-button color="#5865F2" plain @click="submit"> submit </el-button>
+				<el-checkbox class="checkbox" v-model="isSave" label="Remember your token" size="large" />
 			</div>
 
-			<el-dialog v-model="dialogVisible" title="如何获取用户令牌" align-center>
+			<el-dialog v-model="dialogVisible" title="How to get user token" align-center>
 				<ol>
-					<li>打开Discord桌面应用程序或登录Discord网站</li>
-					<li>用键盘快捷键打开Chrome开发工具</li>
+					<li>Open Discord desktop app or login Discord website</li>
+					<li>Open Chrome developer tools with keyboard shortcut</li>
 					<li>F12 or Ctrl + Shift + I</li>
-					<li>转到网络选项卡</li>
-					<li>单击XHR按钮, 只过滤到XHR请求</li>
-					<li>在Discord中做任何动作, 比如打开一个频道</li>
-					<li>点击列表中出现的science请求</li>
-					<li>转到Headers选项卡</li>
-					<li>在Request Headers下找到授权并复制令牌(确保复制整个令牌，不要复制任何空格)</li>
+					<li>Go to Network tab</li>
+					<li>Click XHR button, only filter to XHR requests</li>
+					<li>Do any action in Discord, like open a channel</li>
+					<li>Click the science request that appears in the list</li>
+					<li>Go to Headers tab</li>
+					<li>Find Authorization in Request Headers and copy the token (make sure to copy the entire token, don't copy any spaces)</li>
 				</ol>
-				<img src="/discordTokenHint.jpg" alt="token提示" />
+				<img src="/discordTokenHint.jpg" alt="token hint" />
 			</el-dialog>
 		</div>
 
 		<div class="list">
 			<div class="serverList" v-if="serverLoad">
-				<el-table ref="singleTableRef" :data="serverList" highlight-current-row height="400" style="width: auto" @current-change="handleCurrentChange">
+				<el-table
+					ref="singleTableRef"
+					:data="serverList"
+					highlight-current-row
+					height="400"
+					style="width: auto"
+					@current-change="handleCurrentChange"
+				>
 					<el-table-column type="index" width="50" />
-					<el-table-column label="封面" width="80">
+					<el-table-column label="Server Icon" width="80">
 						<template #default="scope">
-							<img :src="`https://cdn.discordapp.com/icons/${scope.row.id}/${scope.row.icon}.png`" alt="封面" style="width: 50px; height: 50px" />
+							<img
+								:src="`https://cdn.discordapp.com/icons/${scope.row.id}/${scope.row.icon}.png`"
+								alt="Server Icon"
+								style="width: 50px; height: 50px"
+							/>
 						</template>
 					</el-table-column>
-					<el-table-column property="id" label="服务器ID" width="190" />
-					<el-table-column property="name" label="服务器名" />
+					<el-table-column property="id" label="Server ID" width="190" />
+					<el-table-column property="name" label="Server Name" />
 				</el-table>
 			</div>
 
 			<div class="emoticonList" v-if="emojiListLoad">
 				<div class="bar">
-					<el-button color="#5865F2" plain @click="downloadEmoji('all')">下载所有emoji</el-button>
-					<el-button color="#5865F2" plain @click="downloadEmoji('selected')">下载选择的emoji</el-button>
-					<el-button color="#5865F2" plain @click="downloadSticker('all')">下载所有sticker</el-button>
-					<el-button color="#5865F2" plain @click="downloadSticker('selected')">下载选择的sticker</el-button>
+					<el-button color="#5865F2" plain @click="downloadEmoji('all')">Download All Emoji</el-button>
+					<el-button color="#5865F2" plain @click="downloadEmoji('selected')">Download Selected Emoji</el-button>
+					<el-button color="#5865F2" plain @click="downloadSticker('all')">Download All Sticker</el-button>
+					<el-button color="#5865F2" plain @click="downloadSticker('selected')">Download Selected Sticker</el-button>
 				</div>
 				<el-collapse v-model="activeNames">
-					<el-collapse-item title="表情" name="1">
+					<el-collapse-item title="Emoji" name="1">
 						<span class="emoction" v-for="item in emojiList" :key="item.id">
 							<input type="checkbox" :id="item.id" v-model="selectedEmoji" :value="item" />
 							<label :for="item.id">
@@ -59,7 +70,7 @@
 							</label>
 						</span>
 					</el-collapse-item>
-					<el-collapse-item title="贴纸" name="2">
+					<el-collapse-item title="Sticker" name="2">
 						<span class="emoction" v-for="item in stickerList" :key="item.id">
 							<input type="checkbox" :id="item.id" v-model="selectedSticker" :value="item" />
 							<label :for="item.id">
@@ -123,7 +134,10 @@ let emojiListLoad = ref(false);
 const activeNames = ref(["1"]);
 const handleCurrentChange = async (e) => {
 	try {
-		const [emojiRes, stickerRes] = await Promise.all([API.request("GET", API.emojis(e.id), token.value), API.request("GET", API.stickers(e.id), token.value)]);
+		const [emojiRes, stickerRes] = await Promise.all([
+			API.request("GET", API.emojis(e.id), token.value),
+			API.request("GET", API.stickers(e.id), token.value),
+		]);
 
 		emojiList.value = await emojiRes.json();
 		stickerList.value = await stickerRes.json();
@@ -245,7 +259,7 @@ onMounted(() => {
 	if (saveToken) {
 		token.value = saveToken;
 	}
-})
+});
 </script>
 
 <style lang="scss" scoped>

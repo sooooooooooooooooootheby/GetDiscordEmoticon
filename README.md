@@ -1,10 +1,16 @@
-# GetDiscordEmoticon
+# discord_get_emoticon
 
-This tool can help you download emoticon from any server on Discord
+This template should help get you started developing with Vue 3 in Vite.
 
-click here [Get Discord Emoticon](https://dcemoticon.s22y.moe/)
+## Recommended IDE Setup
 
-# Project Setup
+[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+
+## Customize configuration
+
+See [Vite Configuration Reference](https://vite.dev/config/).
+
+## Project Setup
 
 ```sh
 pnpm install
